@@ -30,7 +30,7 @@ public class MoneyTransferTest {
         firstCardInfo = DataHelper.getFirstCardInfo(); //получаем номер и id первой карты
         secondCardInfo = DataHelper.getSecondCardInfo(); //получаем номер и id второй карты
         firstCardBalance = dashboardPage.getCardBalance(getMaskedNumber(firstCardInfo.getCardNumber())); //получаем данные о балансе карты по маске карты, которую получаем по номеру карты
-        secondCardBalance = dashboardPage.getCardBalance(1); //получаем данные о балансе карты по её id
+        secondCardBalance = dashboardPage.getCardBalance(1); //получаем данные о балансе второй карты по её id
     }
 
     @Test //тестируем возможность перевода с первой карты на вторую
@@ -53,7 +53,7 @@ public class MoneyTransferTest {
         var amount = generateInvalidAmount(secondCardBalance); //генерируем сумму выходящую за рамки допустимого лимита перевода
         var transferPage = dashboardPage.selectCardToTransfer(firstCardInfo); //нажимаем кнопку пополнить первой карты
         transferPage.makeTransfer(String.valueOf(amount), secondCardInfo); //на странице пополнения вводим невалидную сумму перевода, вводим данные второй карты
-        transferPage.findErrorMessage("Ошибка"); //ловим сообщение об ошибке
+        transferPage.findErrorMessage("Ошибка"); //ловим сообщение об ошибке по ожидаемому тексту ошибки, в элементах страницы нашёл только notification__title равный значению "Ошибка", по нему ошибку и ищу
         dashboardPage.reloadDashboardPage(); //обновляем страницу
         var actualBalanceFirstCard = dashboardPage.getCardBalance(getMaskedNumber(firstCardInfo.getCardNumber())); //получаем актуальные данные о балансе первой карты по маске(которую получаем по номеру карты)
         var actualBalanceSecondCard = dashboardPage.getCardBalance(getMaskedNumber(secondCardInfo.getCardNumber())); //получаем актуальные данные о балансе второй карты по маске(которую получаем по номеру карты)
